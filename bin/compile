@@ -36,14 +36,32 @@ build_chicken() {
 	popd
 }
 
+build_egg() {
+	local egg=$1
+	local status=$(chicken-status $egg | awk '{ print $1 }')
+	if [ "$egg" != "$status" ]; then
+		echo "---> Installing Egg: $egg"
+		chicken-install "$egg"
+	else
+		echo "---> Egg is installed, skipping: $egg"
+	fi
+}
 
 set -e
 # Build Chicken & keep in cache
 build_chicken
+
+# Environment setup
 export PATH=${CHICKEN_PREFIX}/bin:${PATH}
 export LD_LIBRARY_PATH=${CHICKEN_PREFIX}/lib:${LD_LIBRARY_PATH}
+
+# Egg installation
 echo "---> Installing Eggs"
-cat ${EGG_LIST} | xargs -L1 ${CHICKEN_PREFIX}/bin/chicken-install
-pushd ${BUILD_DIR}
+for egg in $(cat ${EGG_LIST}); do
+	build_egg $egg
+done
+
+# Application Building
+cd ${BUILD_DIR}
 echo "---> Building App"
 make
