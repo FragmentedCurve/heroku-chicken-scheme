@@ -14,14 +14,15 @@ CHICKEN_TARBALL=chicken-${CHICKEN_VERSION}.tar.gz
 CHICKEN_URI=https://code.call-cc.org/releases/${CHICKEN_VERSION}/${CHICKEN_TARBALL}
 
 CHICKEN_PREFIX=${CACHE_DIR}/chicken-${CHICKEN_VERSION}/
+CHICKEN_BUILT_TOKEN=${CACHE_DIR}/BUILD_SUCCESS_CHICKEN_${CHICKEN_VERSION}
 EGG_LIST=${BUILD_DIR}/chicken_eggs.txt
 
 build_chicken() {
 	pushd ${CACHE_DIR}
-	if [ -e CHICKEN_BUILD_SUCCESS ]; then
+	if [ -e ${CHICKEN_BUILT_TOKEN} ]; then
 		return 0
 	fi
-	rm -rf ${CHICKEN_TARBALL} chicken-${CHICKEN_VERSION} CHICKEN_BUILD_SUCCESS ${CHICKEN_PREFIX}
+	rm -rf ${CHICKEN_TARBALL} chicken-${CHICKEN_VERSION} ${CHICKEN_BUILT_TOKEN} ${CHICKEN_PREFIX}
 	echo "---> Fetching ${CHICKEN_TARBALL}"
 	wget ${CHICKEN_URI}
 	echo "---> Extracting ..."
@@ -31,7 +32,7 @@ build_chicken() {
 	echo "     (This is only required for the first build of your app.)"
 	make PLATFORM=linux PREFIX=${CHICKEN_PREFIX}
 	make PLATFORM=linux PREFIX=${CHICKEN_PREFIX} install
-	touch CHICKEN_BUILD_SUCCESS
+	touch ${CHICKEN_BUILT_TOKEN}
 	popd
 }
 
