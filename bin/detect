@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+BUILD_DIR=$1
+
+[ -f "${BUILD_DIR}/chicken_eggs.txt" ] && [ -f "${BUILD_DIR}/Makefile" ]
