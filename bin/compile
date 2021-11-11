@@ -6,8 +6,8 @@ ENV_DIR=$3
 
 CHICKEN_VERSION=5.2.0
 # Is a version declared?
-if [ -f "${ENV_DIR}/CHICKEN_VERSION" ]; then
-	CHICKEN_VERSION=$(cat ${ENV_DIR}/CHICKEN_VERSION)
+if [ -f "${BUILD_DIR}/chicken_version.txt" ]; then
+	CHICKEN_VERSION=$(cat ${BUILD_DIR}/chicken_version.txt)
 fi
 
 CHICKEN_TARBALL=chicken-${CHICKEN_VERSION}.tar.gz
