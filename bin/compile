@@ -61,7 +61,15 @@ for egg in $(cat ${EGG_LIST}); do
 	build_egg $egg
 done
 
+# Put chicken libraries in the application
+echo "---> Installing libraries into /app/chicken-libs"
+mkdir -p ${BUILD_DIR}/chicken-libs/
+for f in `find ${CHICKEN_PREFIX}/lib -name '*.so*'`; do
+	install -v $f ${BUILD_DIR}/chicken-libs/
+done
+
 # Application Building
 cd ${BUILD_DIR}
 echo "---> Building App"
-make
+make heroku
+
